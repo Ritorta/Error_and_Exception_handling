@@ -24,6 +24,8 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Main
@@ -33,19 +35,18 @@ public class Main
         Scanner scanner = new Scanner(System.in);
         // Create scanner
 
-        System.out.println("Enter the data in format: SurName, FirstName, Patronymic, birthDate, phoneNumber, gender");
+        System.out.println("Enter the data in format: SurName, FirstName, Patronymic, Date of birth, Phone Number, You gender");
         String inputScanner = scanner.nextLine();
 
-
         //Check userData to 6
-
         try {
             // Split string
             String[] userData = inputScanner.trim().split(" ");
 
             if (userData.length != 6) 
             {
-                throw new IllegalArgumentException("Incorrect number of userData");
+                throw new IllegalArgumentException
+                ("The incorrect number of fields is filled in, please fill in the correct number of fields, which should not exceed six or be less than six.");
             }
 
             String SurName = userData[0];
@@ -53,7 +54,70 @@ public class Main
             String Patronymic = userData[2];
             String birthDate = userData[3];
             String phoneNumber = userData[4];
-            char gender = userData[5].charAt(0);
+            String gender = userData[5];
 
-        
+            //Check validate userData
+            validateUserData(SurName, FirstName, Patronymic, birthDate, phoneNumber, gender);
+            //Record userData
+            recUserData(SurName, FirstName, Patronymic, birthDate, phoneNumber, gender);
+
+            System.out.println("User Data Successfully Saved");
+        }
+        catch (IllegalArgumentException e)
+        {
+            System.out.println("Error: " + e.getMessage());
+        }
+        catch (IOException e)
+        {
+            System.out.println("Error: Record or Read file");
+            e.printStackTrace();
+        }
+    }
+    // Validate UserData
+    private static void validateUserData(String SurName, String FirstName, String Patronymic, String birthDate, String phoneNumber, String gender)
+    {
+        if(!SurName.matches("[a-zA-Z]+"))
+        {
+            throw new IllegalArgumentException("Incorrect SurName");
+        }
+
+        if(!FirstName.matches("[a-zA-Z]+"))
+        {
+            throw new IllegalArgumentException("Incorrect FirstName");
+        }
+
+        if(!Patronymic.matches("[a-zA-Z]+"))
+        {
+            throw new IllegalArgumentException("Incorrect Patronymic");
+        }
+
+        LocalDate date = LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        int day = date.getDayOfMonth();
+        int month = date.getMonthValue();
+               
+        if(!birthDate.matches("\\d{2}.\\d{2}.\\d{4}") && day < 1 || day > 31 || month < 1 || month > 12)
+        {
+            throw new IllegalArgumentException("Date incorrectly");
+        }
+
+        if(!phoneNumber.matches("^\\+(\\d{1,3}(\\(\\d{1,3}\\))?)(?:[0-9] ?){6,14}[0-9]$"))
+        {
+            throw new IllegalArgumentException("Incorrect Phone Number");
+        }
+
+        if(!gender.matches("[mf]"))
+        {
+            throw new IllegalArgumentException("Incorrect gender");
+        }
+    }
+    // Record Data
+    private static void recUserData(String SurName, String FirstName, String Patronymic, String birthDate, String phoneNumber, String gender) throws IOException
+    {
+        String newFile = SurName + ".txt";
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(newFile, true)))
+        {
+            writer.write(SurName + FirstName + Patronymic + birthDate + phoneNumber + gender + "\n");
+        }
+    }
 }
