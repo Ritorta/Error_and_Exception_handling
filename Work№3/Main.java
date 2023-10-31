@@ -31,10 +31,9 @@ public class Main
 {
     public static void main(String[] args) 
     {
-        Scanner scanner = new Scanner(System.in);
         // Create scanner
-
-        System.out.println("Enter the data in format: SurName, FirstName, Patronymic, Date of birth, Phone Number, You gender");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the data in format: SurName, FirstName, Patronymic, Date of birth, Phone Number, You gender: M or F");
         String inputScanner = scanner.nextLine();
 
         //Check userData to 6
@@ -47,13 +46,14 @@ public class Main
                 throw new IllegalArgumentException
                 ("The incorrect number of fields is filled in, please fill in the correct number of fields, which should not exceed six or be less than six.");
             }
-
+            // Add userData
             String SurName = userData[0];
             String FirstName = userData[1];
             String Patronymic = userData[2];
             String birthDate = userData[3];
             String phoneNumber = userData[4];
-            String gender = userData[5];
+            // String gender = userData[5];
+            char gender = userData[5].charAt(0);
 
             //Check validate userData
             validateUserData(SurName, FirstName, Patronymic, birthDate, phoneNumber, gender);
@@ -73,28 +73,29 @@ public class Main
         }
     }
     // Validate UserData
-    private static void validateUserData(String SurName, String FirstName, String Patronymic, String birthDate, String phoneNumber, String gender)
+    private static void validateUserData(String SurName, String FirstName, String Patronymic, String birthDate, String phoneNumber, char gender)
     {
+        // Validate SurName
         if(!SurName.matches("[a-zA-Z]+"))
         {
             throw new IllegalArgumentException("Incorrect SurName");
         }
-
+        // Validate FirstName
         if(!FirstName.matches("[a-zA-Z]+"))
         {
             throw new IllegalArgumentException("Incorrect FirstName");
         }
-
+        // Validate Patronymic
         if(!Patronymic.matches("[a-zA-Z]+"))
         {
             throw new IllegalArgumentException("Incorrect Patronymic");
         }
-
+        // Validate birthDate
         if(!birthDate.matches("\\d{2}.\\d{2}.\\d{4}"))
         {
             throw new IllegalArgumentException("Date format incorrectly");
         }
- 
+        
         String[] datePars = birthDate.split("\\.");
         int day = Integer.parseInt(datePars[0]);
         int month = Integer.parseInt(datePars[1]);
@@ -103,19 +104,25 @@ public class Main
         {
             throw new IllegalArgumentException("Date values are incorrect");
         }
-
+        // Validate phoneNumber
         if(!phoneNumber.matches("^\\+(\\d{1,3}(\\(\\d{1,3}\\))?)(?:[0-9] ?){6,14}[0-9]$"))
         {
             throw new IllegalArgumentException("Incorrect Phone Number");
         }
+        // Validate gender (String)
+        // if(!gender.matches("(?i)^(m|f|male|female)$"))
+        // {
+        //     throw new IllegalArgumentException("Incorrect gender");
+        // }
 
-        if(!gender.matches("(?i)^(m|f|male|female)$"))
+        // Validate gender (Char)
+        if(!String.valueOf(gender).equalsIgnoreCase("f") && !String.valueOf(gender).equalsIgnoreCase("m"))
         {
             throw new IllegalArgumentException("Incorrect gender");
         }
     }
     // Record Data
-    private static void recUserData(String SurName, String FirstName, String Patronymic, String birthDate, String phoneNumber, String gender) throws IOException
+    private static void recUserData(String SurName, String FirstName, String Patronymic, String birthDate, String phoneNumber, char gender) throws IOException
     {
         String newFile = SurName + ".txt";
 
