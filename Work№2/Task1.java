@@ -43,7 +43,8 @@ public class Task1
           }
 }
 
-// Решение бота
+// Ответ от автотеста:
+
 // public class Task1 
 // {
     
