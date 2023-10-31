@@ -20,3 +20,40 @@
 // Не забудьте закрыть соединение с файлом.
 
 // При возникновении проблемы с чтением-записью в файл, исключение должно быть корректно обработано, пользователь должен увидеть стектрейс ошибки.
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(String[] args) 
+    {
+        Scanner scanner = new Scanner(System.in);
+        // Create scanner
+
+        System.out.println("Enter the data in format: SurName, FirstName, Patronymic, birthDate, phoneNumber, gender");
+        String inputScanner = scanner.nextLine();
+
+
+        //Check userData to 6
+
+        try {
+            // Split string
+            String[] userData = inputScanner.trim().split(" ");
+
+            if (userData.length != 6) 
+            {
+                throw new IllegalArgumentException("Incorrect number of userData");
+            }
+
+            String SurName = userData[0];
+            String FirstName = userData[1];
+            String Patronymic = userData[2];
+            String birthDate = userData[3];
+            String phoneNumber = userData[4];
+            char gender = userData[5].charAt(0);
+
+        
+}
