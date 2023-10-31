@@ -26,6 +26,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Main
@@ -91,13 +92,18 @@ public class Main
             throw new IllegalArgumentException("Incorrect Patronymic");
         }
 
-        LocalDate date = LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        int day = date.getDayOfMonth();
-        int month = date.getMonthValue();
-               
-        if(!birthDate.matches("\\d{2}.\\d{2}.\\d{4}") && day < 1 || day > 31 || month < 1 || month > 12)
+        if(!birthDate.matches("\\d{2}.\\d{2}.\\d{4}"))
         {
-            throw new IllegalArgumentException("Date incorrectly");
+            throw new IllegalArgumentException("Date format incorrectly");
+        }
+ 
+        String[] datePars = birthDate.split("\\.");
+        int day = Integer.parseInt(datePars[0]);
+        int month = Integer.parseInt(datePars[1]);
+
+        if (day < 1 || day > 31 || month < 1 || month > 12) 
+        {
+            throw new IllegalArgumentException("Date values are incorrect");
         }
 
         if(!phoneNumber.matches("^\\+(\\d{1,3}(\\(\\d{1,3}\\))?)(?:[0-9] ?){6,14}[0-9]$"))
@@ -105,7 +111,7 @@ public class Main
             throw new IllegalArgumentException("Incorrect Phone Number");
         }
 
-        if(!gender.matches("[mf]"))
+        if(!gender.matches("(?i)^(m|f|male|female)$"))
         {
             throw new IllegalArgumentException("Incorrect gender");
         }
